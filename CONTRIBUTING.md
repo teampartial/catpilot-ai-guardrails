@@ -20,7 +20,7 @@ You found the community scratching post.
 ## Before You PR
 
 - [ ] Test with your AI assistant (does it follow the new rule?)
-- [ ] Check file size: `wc -c copilot-instructions.md` (must be < 5KB)
+- [ ] Check file size: `wc -c copilot-instructions.md` (should be < 32KB)
 - [ ] Keep PRs focused (one pattern per PR)
 - [ ] Include before/after examples
 
@@ -54,7 +54,7 @@ The whole point is staying small so we don't bloat the AI's context window:
 
 | File | Budget |
 |------|--------|
-| `copilot-instructions.md` | < 5KB |
+| `copilot-instructions.md` | < 32KB |
 | Framework `condensed.md` | 600-800 bytes |
 | `FULL_*.md` files | No limit (loaded on-demand) |
 
