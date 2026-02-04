@@ -186,8 +186,24 @@ if [ -f "$TARGET_FILE" ]; then
     echo ""
     
     # Extract existing content (skip any previous guardrails section if present)
-    # Look for "# Project-Specific" or "# Your" or first heading that's not safety-related
-    EXISTING_CONTENT=$(cat "$TARGET_FILE")
+    # Be more robust: sed to print from 'Project-Specific Rules' to end, but delete that header line itself (since we add it back)
+    # If the marker isn't found, we assume the whole file is custom content (migration case)
+    if grep -q "## 🎯 Project-Specific Rules" "$TARGET_FILE"; then
+        EXISTING_CONTENT=$(sed -n '/^## 🎯 Project-Specific Rules/,$p' "$TARGET_FILE" | tail -n +2)
+    else
+        # Fallback for raw files: try to avoid duplicating safety headers if they exist
+        if grep -q "# AI Guardrails" "$TARGET_FILE"; then
+             # It looks like an old version of guardrails without the marker?
+             # Risk of duplication here, but safer than deleting everything.
+             # Ideally user should have the marker.
+             EXISTING_CONTENT=$(cat "$TARGET_FILE") 
+             echo -e "${YELLOW}Warning: Could not find '## 🎯 Project-Specific Rules' marker.${NC}"
+             echo "Assuming entire file needs to be preserved. Check for duplicates manually."
+        else
+             # Pure custom file
+             EXISTING_CONTENT=$(cat "$TARGET_FILE")
+        fi
+    fi
     
     # Merge: Guardrails first, then existing content under Project-Specific section
     echo "Merging guardrails with existing content..."
@@ -195,8 +211,8 @@ if [ -f "$TARGET_FILE" ]; then
     
     # Create merged file
     {
-        # Copy guardrails (everything except the Project-Specific section placeholder)
-        sed '/^## 🎯 Project-Specific Rules/,$d' "$SAFETY_GUIDELINES"
+        # Copy guardrails (everything except the Project-Specific section placeholder) and fix links
+        sed '/^## 🎯 Project-Specific Rules/,$d' "$SAFETY_GUIDELINES" | sed 's|\[FULL_GUARDRAILS.md\](\./FULL_GUARDRAILS.md)|[FULL_GUARDRAILS.md](.github/catpilot-ai-guardrails/FULL_GUARDRAILS.md)|g'
         
         echo ""
         echo "## 🎯 Project-Specific Rules"
@@ -223,8 +239,8 @@ else
     echo "Installing fresh copy..."
     echo ""
     
-    # Copy the safety guidelines
-    cp "$SAFETY_GUIDELINES" "$TARGET_FILE"
+    # Copy the safety guidelines and fix links
+    sed 's|\[FULL_GUARDRAILS.md\](\./FULL_GUARDRAILS.md)|[FULL_GUARDRAILS.md](.github/catpilot-ai-guardrails/FULL_GUARDRAILS.md)|g' "$SAFETY_GUIDELINES" > "$TARGET_FILE"
     
     echo -e "${GREEN}✓ Installed successfully!${NC}"
     echo ""
@@ -248,6 +264,12 @@ if [ -n "$FRAMEWORK" ]; then
         else
             # Insert framework content before Project-Specific Rules section
             FRAMEWORK_CONTENT=$(cat "$FRAMEWORK_FILE")
+            
+            # Fix relative links in framework content
+            # 1. Fix ./ references to current framework dir
+            FRAMEWORK_CONTENT=$(echo "$FRAMEWORK_CONTENT" | sed "s|](\./|](.github/catpilot-ai-guardrails/frameworks/$FRAMEWORK/|g")
+            # 2. Fix ../ references to sibling framework dirs
+            FRAMEWORK_CONTENT=$(echo "$FRAMEWORK_CONTENT" | sed "s|](\.\./|](.github/catpilot-ai-guardrails/frameworks/|g")
             
             # Create temp file with framework content inserted
             sed -i.tmp '/^## 🎯 Project-Specific Rules/i\
