@@ -210,7 +210,7 @@ if [ -f "$TARGET_FILE" ]; then
         echo ""
         echo "---"
         echo ""
-        echo "*Full guardrails with examples: [FULL_GUARDRAILS.md](.github/ai-safety/FULL_GUARDRAILS.md)*"
+        echo "*Full guardrails with examples: [FULL_GUARDRAILS.md](.github/catpilot-ai-guardrails/FULL_GUARDRAILS.md)*"
     } > "$TARGET_FILE"
     
     echo -e "${GREEN}✓ Merged successfully!${NC}"

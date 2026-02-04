@@ -14,8 +14,8 @@ Built by [Catpilot.ai](https://catpilot.ai)—born from a real incident where an
 ## Quick Start
 
 ```bash
-git submodule add https://github.com/catpilotai/catpilot-ai-guardrails.git .github/ai-safety
-./.github/ai-safety/setup.sh
+git submodule add https://github.com/catpilotai/catpilot-ai-guardrails.git .github/catpilot-ai-guardrails
+./.github/catpilot-ai-guardrails/setup.sh
 git add .gitmodules .github/
 git commit -m "Add AI guardrails"
 ```
@@ -40,13 +40,13 @@ The setup script auto-detects your framework and adds relevant security patterns
 
 ```bash
 # Auto-detect (recommended)
-./.github/ai-safety/setup.sh
+./.github/catpilot-ai-guardrails/setup.sh
 
 # Override detection
-./.github/ai-safety/setup.sh --framework django
+./.github/catpilot-ai-guardrails/setup.sh --framework django
 
 # Skip framework patterns
-./.github/ai-safety/setup.sh --no-framework
+./.github/catpilot-ai-guardrails/setup.sh --no-framework
 ```
 
 Each framework adds ~600-800 bytes of security patterns specific to that stack.
@@ -65,13 +65,13 @@ Fork `catpilotai/catpilot-ai-guardrails` to your organization (e.g., `YOUR_ORG/a
 ### Step 2: Add Submodule to Your Repos
 
 ```bash
-git submodule add git@github.com:YOUR_ORG/ai-guardrails.git .github/ai-safety
+git submodule add git@github.com:YOUR_ORG/ai-guardrails.git .github/catpilot-ai-guardrails
 ```
 
 ### Step 3: Run Setup & Commit
 
 ```bash
-./.github/ai-safety/setup.sh
+./.github/catpilot-ai-guardrails/setup.sh
 git add .gitmodules .github/
 git commit -m "Add AI guardrails"
 ```
@@ -91,8 +91,8 @@ git push
 
 Then in each repo:
 ```bash
-git submodule update --remote .github/ai-safety
-./.github/ai-safety/setup.sh --force
+git submodule update --remote .github/catpilot-ai-guardrails
+./.github/catpilot-ai-guardrails/setup.sh --force
 git commit -m "Update AI guardrails"
 ```
 
