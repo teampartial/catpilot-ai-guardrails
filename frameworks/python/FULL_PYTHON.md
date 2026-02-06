@@ -1,6 +1,6 @@
 # Core Python Security Guardrails — Full Reference
 
-> **Version:** 1.0.0 | **Condensed:** [condensed.md](./condensed.md)
+> **Version:** 2.0.0 | **Condensed:** [condensed.md](./condensed.md)
 
 This document provides security patterns for general Python development, focusing on scripts, automation, and data processing beyond specific web frameworks (Django/FastAPI).
 

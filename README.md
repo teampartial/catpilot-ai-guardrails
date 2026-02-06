@@ -5,7 +5,7 @@
   <em>Paws before you push.</em>
 </p>
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue) ![License](https://img.shields.io/badge/license-MIT-green)
+![Version](https://img.shields.io/badge/version-2.0.0-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
 Most coding agents read a local file for project-specific guidance—but most teams leave it empty. Drop in these guardrails to catch dangerous patterns that cause **outages, security vulnerabilities, and secret leaks.**
 
@@ -35,8 +35,10 @@ The setup script auto-detects your framework and adds relevant security patterns
 | `requirements.txt` with `fastapi` | FastAPI (+Core Python) |
 | `pom.xml`/`build.gradle` with `spring` | Spring Boot |
 | `package.json` with `"express"` | Express |
+| `tsconfig.json` (without Next.js) | TypeScript |
 | `*.py` or `requirements.txt` | Python (Core/Scripts) |
 | `Dockerfile` | Docker |
+| `openclaw.mjs`, `.openclaw/`, or `AGENTS.md` with openclaw refs | OpenClaw |
 
 ```bash
 # Auto-detect (recommended)
@@ -47,6 +49,9 @@ The setup script auto-detects your framework and adds relevant security patterns
 
 # Skip framework patterns
 ./.github/catpilot-ai-guardrails/setup.sh --no-framework
+
+# Verify installed version matches source
+./.github/catpilot-ai-guardrails/setup.sh --verify
 ```
 
 Each framework adds ~600-800 bytes of security patterns specific to that stack.
@@ -109,6 +114,7 @@ git commit -m "Update AI guardrails"
 | Claude Code | `CLAUDE.md` | ✅ (symlink) |
 | Cline | `.clinerules` | ✅ (symlink) |
 | Aider | `.aider.conf.yml` | ✅ (config entry) |
+| OpenClaw | `AGENTS.md` | ✅ (symlink) |
 | Codex CLI | Manual | ⚠️ See below |
 
 <details>
@@ -138,7 +144,12 @@ codex-safe "fix the auth bug"
 - ☸️ **Kubernetes/Helm** — dry-run and diff before applying
 - 📦 **Git safety** — no force-push to protected branches
 - 🛡️ **Secure coding** — OWASP Top 10, input validation, output encoding
-- 🧩 **Framework patterns** — Next.js, Django, Rails, FastAPI, Spring Boot, Express, Python (General), Docker
+- � **AI agent safety** — prompt injection defense, credential isolation, gateway binding
+- 📦 **Supply chain** — skill/plugin vetting, typosquatting detection, red flag patterns
+- 🔐 **File permissions** — credential directories, SSH keys, agent config
+- 🚨 **Incident response** — secret rotation, git history purging, blast radius assessment
+- 🔄 **CI/CD safety** — pin actions to SHA, minimal permissions, no secrets in logs
+- 🧩 **Framework patterns** — Next.js, Django, Rails, FastAPI, Spring Boot, Express, TypeScript, Python, Docker, OpenClaw
 
 **Example: Cloud CLI protection**
 
@@ -213,9 +224,9 @@ stripe.api_key = os.environ["STRIPE_API_KEY"]
 
 | File | Purpose |
 |------|---------|
-| `copilot-instructions.md` | Condensed rules (~4KB) — **auto-loaded by IDE** |
-| `FULL_GUARDRAILS.md` | Complete reference (~20KB) — detailed examples, loaded on-demand |
-| `frameworks/` | Framework-specific patterns (auto-detected) |
+| `copilot-instructions.md` | Condensed rules (~7KB) — **auto-loaded by IDE** |
+| `FULL_GUARDRAILS.md` | Complete reference (~35KB) — detailed examples, loaded on-demand |
+| `frameworks/` | Framework-specific patterns (auto-detected: Next.js, Django, Rails, FastAPI, Spring Boot, Express, TypeScript, Python, Docker, OpenClaw) |
 
 <details>
 <summary><strong>How the two files work together</strong></summary>
@@ -234,6 +245,10 @@ git clone --recurse-submodules <repo-url>
 # Or if already cloned:
 git submodule update --init --recursive
 ```
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history and what's new.
 
 ## Contributing
 

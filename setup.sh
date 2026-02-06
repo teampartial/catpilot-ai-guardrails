@@ -43,7 +43,7 @@ BACKUP_FILE="$TARGET_DIR/copilot-instructions.md.backup"
 SIZE_CAP=32768
 
 # Available frameworks
-AVAILABLE_FRAMEWORKS="nextjs, django, rails, express, fastapi, springboot, python, docker"
+AVAILABLE_FRAMEWORKS="nextjs, django, rails, express, fastapi, springboot, python, typescript, openclaw, docker"
 
 # Auto-detect framework based on common files
 detect_framework() {
@@ -87,6 +87,20 @@ detect_framework() {
         return
     fi
 
+    # OpenClaw - check for openclaw config or project structure
+    if [ -f "openclaw.mjs" ] || [ -f ".openclaw" ] || \
+       ([ -f "AGENTS.md" ] && grep -qi "openclaw\|clawdbot\|clawhub" AGENTS.md 2>/dev/null) || \
+       ([ -f "package.json" ] && grep -q '"openclaw"' package.json 2>/dev/null); then
+        echo "openclaw"
+        return
+    fi
+
+    # TypeScript (General) - check for tsconfig.json without specific frameworks
+    if [ -f "tsconfig.json" ] && ! grep -q '"next"' package.json 2>/dev/null; then
+        echo "typescript"
+        return
+    fi
+
     # Python (General) - check for python files if no specific framework found
     if ls *.py >/dev/null 2>&1 || [ -f "requirements.txt" ] || [ -f "pyproject.toml" ]; then
         echo "python"
@@ -106,6 +120,23 @@ while [[ $# -gt 0 ]]; do
         --force)
             FORCE=true
             shift
+            ;;
+        --verify)
+            # Check if guardrails are up to date
+            if [ -f "$TARGET_FILE" ] && grep -q "AI Guardrails" "$TARGET_FILE" 2>/dev/null; then
+                INSTALLED_VERSION=$(grep -o 'Version: [0-9.]*' "$TARGET_FILE" | head -1 | cut -d' ' -f2)
+                SOURCE_VERSION=$(grep -o 'Version: [0-9.]*' "$SAFETY_GUIDELINES" | head -1 | cut -d' ' -f2)
+                if [ "$INSTALLED_VERSION" = "$SOURCE_VERSION" ]; then
+                    echo -e "${GREEN}✓ Guardrails up to date (v$INSTALLED_VERSION)${NC}"
+                else
+                    echo -e "${YELLOW}⚠ Update available: v$INSTALLED_VERSION → v$SOURCE_VERSION${NC}"
+                    echo "  Run: $(basename $0) --force"
+                fi
+            else
+                echo -e "${RED}✗ Guardrails not installed${NC}"
+                echo "  Run: $(basename $0)"
+            fi
+            exit 0
             ;;
         --framework)
             FRAMEWORK="$2"
