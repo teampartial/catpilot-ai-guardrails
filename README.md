@@ -39,6 +39,7 @@ The setup script auto-detects your framework and adds relevant security patterns
 | `*.py` or `requirements.txt` | Python (Core/Scripts) |
 | `Dockerfile` | Docker |
 | `openclaw.mjs`, `.openclaw/`, or `AGENTS.md` with openclaw refs | OpenClaw |
+| `requirements.txt`/`pyproject.toml` with `langchain`, `crewai`, `autogpt`, `langgraph` | Agentic AI |
 
 ```bash
 # Auto-detect (recommended)
@@ -150,7 +151,7 @@ codex-safe "fix the auth bug"
 - 🔐 **File permissions** — credential directories, SSH keys, agent config
 - 🚨 **Incident response** — secret rotation, git history purging, blast radius assessment
 - 🔄 **CI/CD safety** — pin actions to SHA, minimal permissions, no secrets in logs
-- 🧩 **Framework patterns** — Next.js, Django, Rails, FastAPI, Spring Boot, Express, TypeScript, Python, Docker, OpenClaw
+- 🧩 **Framework patterns** — Next.js, Django, Rails, FastAPI, Spring Boot, Express, TypeScript, Python, Docker, OpenClaw, Agentic AI
 
 **Example: Cloud CLI protection**
 
@@ -227,7 +228,7 @@ stripe.api_key = os.environ["STRIPE_API_KEY"]
 |------|---------|
 | `copilot-instructions.md` | Condensed rules (~7KB) — **auto-loaded by IDE** |
 | `FULL_GUARDRAILS.md` | Complete reference (~35KB) — detailed examples, loaded on-demand |
-| `frameworks/` | Framework-specific patterns (auto-detected: Next.js, Django, Rails, FastAPI, Spring Boot, Express, TypeScript, Python, Docker, OpenClaw) |
+| `frameworks/` | Framework-specific patterns (auto-detected: Next.js, Django, Rails, FastAPI, Spring Boot, Express, TypeScript, Python, Docker, OpenClaw, Agentic AI) |
 
 <details>
 <summary><strong>How the two files work together</strong></summary>

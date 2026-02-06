@@ -13,8 +13,10 @@ All notable changes to this project will be documented in this file.
 - **CI/CD Pipeline Safety** — pin GitHub Actions to SHA, minimal permissions, OIDC over long-lived secrets, approval gates for production
 - **TypeScript framework** — `eval`/`new Function()` blocking, `child_process` safety, prototype pollution, path traversal, ReDoS, Zod validation patterns
 - **OpenClaw framework** — gateway binding, ClawHub skill vetting, sandbox configuration, DM policy, prompt injection defense, credential storage
+- **Agentic AI framework** — tool sandboxing, human-in-the-loop, memory isolation, output filtering, multi-agent coordination, rate limiting, credential management
 - **`--verify` flag** for `setup.sh` — checks installed guardrails version matches source
 - **OpenClaw detection** in `setup.sh` — auto-detects `openclaw.mjs`, `.openclaw/`, or OpenClaw references in `AGENTS.md`
+- **Agentic AI detection** in `setup.sh` — auto-detects LangChain, CrewAI, AutoGPT, LangGraph, LlamaIndex in dependencies
 - **TypeScript detection** in `setup.sh` — auto-detects `tsconfig.json` (when not Next.js)
 - **OpenClaw** added to Tool Support (auto-configures `AGENTS.md` symlink)
 

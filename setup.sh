@@ -43,7 +43,7 @@ BACKUP_FILE="$TARGET_DIR/copilot-instructions.md.backup"
 SIZE_CAP=32768
 
 # Available frameworks
-AVAILABLE_FRAMEWORKS="nextjs, django, rails, express, fastapi, springboot, python, typescript, openclaw, docker"
+AVAILABLE_FRAMEWORKS="nextjs, django, rails, express, fastapi, springboot, python, typescript, openclaw, agentic, docker"
 
 # Auto-detect framework based on common files
 detect_framework() {
@@ -92,6 +92,14 @@ detect_framework() {
        ([ -f "AGENTS.md" ] && grep -qi "openclaw\|clawdbot\|clawhub" AGENTS.md 2>/dev/null) || \
        ([ -f "package.json" ] && grep -q '"openclaw"' package.json 2>/dev/null); then
         echo "openclaw"
+        return
+    fi
+
+    # Agentic AI - check for common agent framework patterns
+    if ([ -f "requirements.txt" ] && grep -qi "langchain\|crewai\|autogpt\|langgraph\|llama.index" requirements.txt 2>/dev/null) || \
+       ([ -f "pyproject.toml" ] && grep -qi "langchain\|crewai\|autogpt\|langgraph\|llama.index" pyproject.toml 2>/dev/null) || \
+       ([ -f "package.json" ] && grep -qi "langchain\|autogen" package.json 2>/dev/null); then
+        echo "agentic"
         return
     fi
 
